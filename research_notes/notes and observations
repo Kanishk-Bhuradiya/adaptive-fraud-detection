@@ -1,0 +1,17 @@
+## Identity Availability and Fraud Prevalence
+
+**Research question:** Does observed fraud prevalence differ between transactions with and without matching identity records?
+
+**Method:** Matched transaction IDs against the training identity table and calculated fraud rates for the two groups.
+
+**Results:**
+- Identity available: 144,233 transactions, 11,318 fraud cases, 7.847% fraud rate.
+- Identity unavailable: 446,307 transactions, 9,345 fraud cases, 2.094% fraud rate.
+- Absolute difference: 5.753 percentage points.
+- Fraud-rate ratio: approximately 3.75.
+
+**Interpretation:** Identity availability is strongly associated with observed fraud prevalence in the training dataset.
+
+**Limitations:** This is a descriptive comparison, not a causal result. Differences between the two transaction groups may explain some or all of the association.
+
+**Next step:** Establish chronological training, validation, and test periods for leakage-safe model evaluation.
