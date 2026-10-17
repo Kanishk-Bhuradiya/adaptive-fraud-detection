@@ -75,3 +75,13 @@ Next steps:
 3. Train baseline models.
 4. Measure temporal feature drift.
 5. Compare predictive performance across future periods.
+
+## Equal-duration temporal analysis
+
+The transaction dataset was divided into eight equal-duration intervals using `TransactionDT`, a relative time offset. Transaction counts consequently differed across intervals.
+
+The observed fraud rate varied over time, reaching its highest level in Window 3 (approximately 4.26%) and its lowest level in Window 1 (approximately 2.55%). Identity-data coverage also changed substantially, declining from approximately 42% in Window 1 to approximately 17–20% across several later windows, before increasing in Window 8.
+
+These findings indicate temporal variation in fraud prevalence and identity-data availability. They do not establish concept drift or explain the cause of the changes. Further analysis is needed to investigate transaction composition, feature distributions, and future-period model performance.
+
+**Limitation:** The intervals represent equal durations in relative `TransactionDT` units and should not be interpreted as calendar weeks.
