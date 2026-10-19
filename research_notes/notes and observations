@@ -15,3 +15,38 @@
 **Limitations:** This is a descriptive comparison, not a causal result. Differences between the two transaction groups may explain some or all of the association.
 
 **Next step:** Establish chronological training, validation, and test periods for leakage-safe model evaluation.
+
+What this output tells us
+
+1. The model is worth having, and retraining saves money in every scenario.
+
+Saving vs static (%)	cheap review	balanced	friction-heavy	fraud-heavy
+every 4 weeks	7.4	12.2	10.5	8.9
+every 2 weeks	11.2	17.3	13.9	12.6
+trigger >10%	6.0	9.8	9.0	6.9
+trigger >15%	6.0	10.7	8.8	7.1
+The sanity check passed. Even the static model beats “no model” in all four scenarios (35% to 78% cheaper).
+Retraining beats static in every scenario, so the conclusion doesn’t depend on one assumed cost. In the balanced scenario, retraining every 2 weeks saves about $117,000 over 11 weeks, which is 17% of the static model’s cost.
+The cost saving (7% to 17%) is a different yardstick from the PR-AUC gain (about 8% to 10%). They don’t have to match, because the cost depends on which frauds are missed (large amounts matter more).
+
+2. How often to retrain (your question 4). Compare each strategy’s break-even, which is the saving per extra retrain:
+
+The first 2 extra retrains (“every 4 weeks”) are worth about $41,000 each.
+Going from every 4 to every 2 weeks saves another $34,458 for 3 extra retrains, so about $11,500 each.
+
+So if one retrain costs less than about $11,500 in total (compute, validation, people), retraining every 2 weeks pays off. If it costs between $11,500 and $41,000, every 4 weeks is better. If it costs more than $41,000, even that doesn’t pay in this data. The drift triggers land in the same range as every 4 weeks (about $33,000 to $36,000 per retrain), consistent with what we found in PR-AUC: they are not smarter than a calendar here.
+
+3. The rolling window looks weaker in cost terms. In the cheap-review (2.9%) and fraud-heavy (4.9%) scenarios, it saves far less than the expanding window, even though its PR-AUC matched. I can’t tell from this output why. A plausible explanation is that with half the training data it ranks the high-value frauds slightly worse, but that is a guess. It’s a good reason not to judge strategies by PR-AUC alone.
+
+4. Caveats to state in your report.
+
+All costs are assumed, not real, and the dollar figures scale with transaction volume. This dataset is a sample, so a real company would have bigger numbers.
+These results assume labels arrive instantly. The delay test showed gains shrink by about a third over all weeks.
+There are no confidence intervals on the costs. Differences of a few percent between strategies (for example the triggers vs every 4 weeks) are within noise.
+The thresholds were chosen on validation weeks, never on the test, which is the right way. But the weekly validation window is only 2 weeks, so the thresholds themselves are noisy.
+Step 21: explainability with SHAP
+
+SHAP shows how much each feature pushed each prediction toward or away from fraud. Averaging the absolute SHAP values gives a “how much does the model rely on this feature” score. We ask two questions:
+
+A. Is the static model’s explanation stable? We compare which features matter in its training weeks (1-12), the early test weeks (15-17) and the late test weeks (23-25). To see what “no change” looks like, we also compare two independent samples of the same period, which gives us a noise baseline.
+B. Did retraining change the explanation? We explain the same late-week rows with the static model and with the model retrained at week 25.
