@@ -17,6 +17,9 @@ The study examines whether fraud prevalence and feature distributions change ove
 
 ## Dataset
 
+Link to dataset : https://www.kaggle.com/competitions/ieee-fraud-detection/data
+link to bundle data set which i used to run my later notebook : https://drive.google.com/drive/folders/1LrkwSvs5macXOWNVVJGdb1YUt22biUN3?usp=drive_link
+
 The project uses the IEEE-CIS Fraud Detection competition dataset.
 
 The training transaction table contains 590,540 transactions and 394 columns, including the `isFraud` target label and the `TransactionDT` relative time variable.
